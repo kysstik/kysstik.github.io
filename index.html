@@ -3,184 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kys_stik | Сайт в процессе</title>
+    <title>kys_stik | пространство</title>
     <style>
-        /* Сброс стандартных отступов, чтобы фон был ровно по всему экрану */
+        /* Сброс стилей и базовые настройки */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* Основные стили для страницы */
         body {
-            /* Красивый градиентный фон: от нежно-розового к персиковому */
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            font-family: 'Segoe UI', 'Arial', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            /* Темный фон с легким градиентом */
+            background: linear-gradient(135deg, #0a0f0d 0%, #121a14 50%, #0a0f0d 100%);
+            font-family: 'Segoe UI', 'Courier New', 'Monaco', monospace;
+            color: #d4e6d1;
+            padding: 2rem;
             position: relative;
-            /* Это нужно, чтобы листья не выходили за пределы видимой области по горизонтали */
-            overflow-x: hidden;
         }
 
-        /* Стиль для карточки с текстом */
-        .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(12px);
-            border-radius: 2rem;
-            padding: 3rem 2rem;
-            margin: 1rem;
-            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            max-width: 90%;
-            width: 600px;
-            z-index: 10; /* Чтобы текст был поверх листьев */
-            animation: fadeInUp 1s ease-out;
+        /* Рисуем плавающие листики и сложный фон через псевдоэлементы */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* чтобы не мешали кликам */
+            background-image: 
+                /* листики - простые фигуры */
+                radial-gradient(circle at 10% 20%, rgba(80, 130, 70, 0.15) 1.5%, transparent 2.5%),
+                radial-gradient(circle at 85% 45%, rgba(110, 170, 90, 0.12) 2%, transparent 3%),
+                radial-gradient(circle at 40% 80%, rgba(60, 110, 50, 0.18) 2.2%, transparent 3.2%),
+                radial-gradient(circle at 70% 15%, rgba(100, 150, 80, 0.1) 1.8%, transparent 2.8%),
+                /* дополнительные точки для фактуры */
+                repeating-linear-gradient(45deg, rgba(70, 120, 60, 0.05) 0px, rgba(70, 120, 60, 0.05) 2px, transparent 2px, transparent 8px);
+            background-repeat: no-repeat;
+            background-size: 200px 200px, 250px 250px, 300px 300px, 180px 180px, auto;
         }
 
-        /* Анимация для появления текста */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Стиль для красивого заголовка */
-        h1 {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            font-weight: 800;
-            background: linear-gradient(135deg, #2d6a4f, #52b788, #74c69d);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.02em;
-        }
-
-        /* Стиль для подзаголовка */
-        .tagline {
-            font-size: 1.2rem;
-            color: #2d6a4f;
-            margin-bottom: 2rem;
-            font-weight: 500;
-            border-bottom: 2px dashed #95d5b2;
-            display: inline-block;
-            padding-bottom: 0.5rem;
-        }
-
-        /* Стиль для основного сообщения */
-        .message {
-            font-size: 1.1rem;
-            color: #1b4332;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-        }
-
-        /* Контейнер для милых значков */
-        .decorations {
-            font-size: 2rem;
-            letter-spacing: 15px;
-            margin-top: 1rem;
-            opacity: 0.7;
-        }
-
-        /* Стили для анимированных листьев (их создаст JavaScript) */
-        .leaf {
+        /* Еще больше листиков через :after (невидимые узоры) */
+        body::after {
+            content: "";
             position: fixed;
             bottom: 0;
-            font-size: 2rem;
-            user-select: none;
-            pointer-events: none; /* Чтобы листья не мешали нажимать на текст */
-            z-index: 5;
-            opacity: 0.6;
-            animation: floatLeaf linear forwards;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="rgba(90,150,70,0.08)" d="M50,10 Q60,30 50,50 Q40,30 50,10 Z M25,40 Q35,55 30,75 Q15,60 25,40 Z M75,35 Q88,45 80,68 Q70,50 75,35 Z M45,70 Q58,80 50,95 Q40,82 45,70 Z"/></svg>') repeat;
+            background-size: 70px 70px;
+            opacity: 0.4;
         }
 
-        /* Анимация полета листа */
-        @keyframes floatLeaf {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-100vh) rotate(360deg);
-                opacity: 0;
-            }
+        /* Основной контейнер - красивый полупрозрачный блок */
+        .container {
+            max-width: 800px;
+            margin: 5vh auto;
+            background: rgba(15, 25, 18, 0.65);
+            backdrop-filter: blur(3px);
+            border-radius: 48px;
+            padding: 2.5rem 2rem;
+            border: 1px solid rgba(110, 170, 90, 0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(70, 130, 50, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* стиль для красивых бессмысленных надписей */
+        .mystic-text {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            word-break: keep-all;
+            line-height: 1.8;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            text-align: center;
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 8px #6a9c5e;
+            word-break: break-word;
+        }
+
+        .sub {
+            text-align: center;
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+            border-bottom: 1px dashed #4a6e3e;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 8px;
+        }
+
+        .leaf-icon {
+            display: inline-block;
+            font-size: 1.4rem;
+            filter: drop-shadow(0 0 3px #8bc34a);
+            margin: 0 4px;
+        }
+
+        .glow {
+            color: #b3e4a2;
+            text-shadow: 0 0 5px #527a3e;
+        }
+
+        .sign-block {
+            background: rgba(0,0,0,0.3);
+            padding: 1.5rem;
+            border-radius: 28px;
+            margin: 2rem 0;
+            text-align: center;
+            font-size: 1.5rem;
+            font-family: monospace;
+            border: 1px solid #3a5e30;
+        }
+
+        .random-phrases {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+            font-style: italic;
+        }
+
+        .random-phrases p {
+            padding-left: 1rem;
+            border-left: 3px solid #6f9e5f;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        /* значок с листиком дополнительно */
+        .special {
+            font-size: 1.8rem;
+        }
+
+        a {
+            color: #b1dc9c;
+            text-decoration: none;
+        }
+        a:hover {
+            text-shadow: 0 0 5px #8bc34a;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Привет, я kys_stik 𖥧</h1>
-        <div class="tagline">✨ место для вдохновения ✨</div>
-        <div class="message">
-            Пока здесь почти ничего нет,<br>
-            но совсем скоро этот уголок наполнится смыслом,<br>
-            идеями и красивыми историями.
-        </div>
-        <div class="decorations">
-            𖥧 𖦹 𖤓 ✿ 🍃
-        </div>
+<div class="container">
+    <h1>
+        <span class="leaf-icon">𖥧</span> kys_stik <span class="leaf-icon">𖥧</span>
+    </h1>
+    <div style="text-align: center;">
+        <div class="sub">✦ место без смысла, но с листьями ✦</div>
     </div>
 
-    <script>
-        // Этот код создает и запускает листья по всему экрану
+    <div class="mystic-text">
+        <p>𖥧  пока здесь пустота, проросшая мхом  𖥧</p>
+        <p>𖥧  silence falls like velvet leaves  𖥧</p>
+        <p>𖥧  ты в пространстве между строк  𖥧</p>
+    </div>
 
-        // Символы, которые будут использоваться в качестве листьев
-        const leaves = ['🍃', '🍂', '🍁', '🌿', '𖥧', '✿', '🌸', '🍀'];
-        
-        // Функция для создания одного листа
-        function createLeaf() {
-            const leaf = document.createElement('div');
-            leaf.classList.add('leaf');
-            
-            // Выбираем случайный символ из массива
-            const randomLeaf = leaves[Math.floor(Math.random() * leaves.length)];
-            leaf.textContent = randomLeaf;
-            
-            // Случайный размер от 1rem до 3rem
-            const size = 1 + Math.random() * 2;
-            leaf.style.fontSize = `${size}rem`;
-            
-            // Случайная позиция по горизонтали (от 0% до 100% ширины экрана)
-            const startPosX = Math.random() * window.innerWidth;
-            leaf.style.left = `${startPosX}px`;
-            
-            // Случайная длительность анимации (от 6 до 15 секунд)
-            const duration = 6 + Math.random() * 9;
-            leaf.style.animationDuration = `${duration}s`;
-            
-            // Небольшая задержка перед началом анимации
-            const delay = Math.random() * 5;
-            leaf.style.animationDelay = `${delay}s`;
-            
-            // Добавляем лист на страницу
-            document.body.appendChild(leaf);
-            
-            // Удаляем лист после окончания анимации, чтобы не засорять память
-            leaf.addEventListener('animationend', () => {
-                leaf.remove();
-            });
-        }
-        
-        // Создаем листья с определенным интервалом
-        // Чем меньше число, тем чаще будут появляться листья
-        setInterval(createLeaf, 400); // Новый лист каждые 400 миллисекунд
-        
-        // Создаем несколько листьев мгновенно при загрузке страницы, чтобы не было пусто
-        for (let i = 0; i < 10; i++) {
-            setTimeout(createLeaf, i * 150);
-        }
-    </script>
+    <!-- Блок с красивыми бессмысленными фразами -->
+    <div class="random-phrases">
+        <p>𖥧  сны о зелёном шуме  𖥧</p>
+        <p>𖥧  лунный свет путается в корнях  𖥧</p>
+        <p>𖥧  мы — трава, что помнит ветер  𖥧</p>
+        <p>𖥧  это просто строчка ради значка  𖥧</p>
+    </div>
+
+    <div class="sign-block">
+        <span class="special">𖥧 𖥧 𖥧</span><br>
+        здесь мог быть ваш глубокий текст<br>
+        но пока только листья и тишина<br>
+        <span class="special">𖥧 𖥧 𖥧</span>
+    </div>
+
+    <footer>
+        ⚘  однажды я заполню этот сад  ⚘ <br>
+        𖥧  а пока просто дыши  𖥧
+    </footer>
+</div>
+
 </body>
 </html>
