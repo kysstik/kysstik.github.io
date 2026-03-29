@@ -1,10 +1,186 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>𖥧попался𖥧</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kys_stik | Сайт в процессе</title>
+    <style>
+        /* Сброс стандартных отступов, чтобы фон был ровно по всему экрану */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Основные стили для страницы */
+        body {
+            /* Красивый градиентный фон: от нежно-розового к персиковому */
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            font-family: 'Segoe UI', 'Arial', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            /* Это нужно, чтобы листья не выходили за пределы видимой области по горизонтали */
+            overflow-x: hidden;
+        }
+
+        /* Стиль для карточки с текстом */
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            padding: 3rem 2rem;
+            margin: 1rem;
+            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            max-width: 90%;
+            width: 600px;
+            z-index: 10; /* Чтобы текст был поверх листьев */
+            animation: fadeInUp 1s ease-out;
+        }
+
+        /* Анимация для появления текста */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Стиль для красивого заголовка */
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #2d6a4f, #52b788, #74c69d);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        /* Стиль для подзаголовка */
+        .tagline {
+            font-size: 1.2rem;
+            color: #2d6a4f;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            border-bottom: 2px dashed #95d5b2;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Стиль для основного сообщения */
+        .message {
+            font-size: 1.1rem;
+            color: #1b4332;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        /* Контейнер для милых значков */
+        .decorations {
+            font-size: 2rem;
+            letter-spacing: 15px;
+            margin-top: 1rem;
+            opacity: 0.7;
+        }
+
+        /* Стили для анимированных листьев (их создаст JavaScript) */
+        .leaf {
+            position: fixed;
+            bottom: 0;
+            font-size: 2rem;
+            user-select: none;
+            pointer-events: none; /* Чтобы листья не мешали нажимать на текст */
+            z-index: 5;
+            opacity: 0.6;
+            animation: floatLeaf linear forwards;
+        }
+
+        /* Анимация полета листа */
+        @keyframes floatLeaf {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>что то умное</h1>
-    <h1>что то глупое</h1>
+
+    <div class="container">
+        <h1>Привет, я kys_stik 𖥧</h1>
+        <div class="tagline">✨ место для вдохновения ✨</div>
+        <div class="message">
+            Пока здесь почти ничего нет,<br>
+            но совсем скоро этот уголок наполнится смыслом,<br>
+            идеями и красивыми историями.
+        </div>
+        <div class="decorations">
+            𖥧 𖦹 𖤓 ✿ 🍃
+        </div>
+    </div>
+
+    <script>
+        // Этот код создает и запускает листья по всему экрану
+
+        // Символы, которые будут использоваться в качестве листьев
+        const leaves = ['🍃', '🍂', '🍁', '🌿', '𖥧', '✿', '🌸', '🍀'];
+        
+        // Функция для создания одного листа
+        function createLeaf() {
+            const leaf = document.createElement('div');
+            leaf.classList.add('leaf');
+            
+            // Выбираем случайный символ из массива
+            const randomLeaf = leaves[Math.floor(Math.random() * leaves.length)];
+            leaf.textContent = randomLeaf;
+            
+            // Случайный размер от 1rem до 3rem
+            const size = 1 + Math.random() * 2;
+            leaf.style.fontSize = `${size}rem`;
+            
+            // Случайная позиция по горизонтали (от 0% до 100% ширины экрана)
+            const startPosX = Math.random() * window.innerWidth;
+            leaf.style.left = `${startPosX}px`;
+            
+            // Случайная длительность анимации (от 6 до 15 секунд)
+            const duration = 6 + Math.random() * 9;
+            leaf.style.animationDuration = `${duration}s`;
+            
+            // Небольшая задержка перед началом анимации
+            const delay = Math.random() * 5;
+            leaf.style.animationDelay = `${delay}s`;
+            
+            // Добавляем лист на страницу
+            document.body.appendChild(leaf);
+            
+            // Удаляем лист после окончания анимации, чтобы не засорять память
+            leaf.addEventListener('animationend', () => {
+                leaf.remove();
+            });
+        }
+        
+        // Создаем листья с определенным интервалом
+        // Чем меньше число, тем чаще будут появляться листья
+        setInterval(createLeaf, 400); // Новый лист каждые 400 миллисекунд
+        
+        // Создаем несколько листьев мгновенно при загрузке страницы, чтобы не было пусто
+        for (let i = 0; i < 10; i++) {
+            setTimeout(createLeaf, i * 150);
+        }
+    </script>
+</body>
 </html>
