@@ -2,556 +2,514 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Логово | Темная чаща</title>
-    <!-- Подключаем красивые шрифты Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 (бесплатные иконки) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Логово — Темная чаща</title>
     <style>
+        /* ========================
+           ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ И СБРОС
+        ======================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="27" viewBox="0 0 24 27"><polygon points="2,2 22,13 12,16 2,25" fill="%2382b74e" stroke="%23345e1e" stroke-width="1.5"/><circle cx="12" cy="13" r="2" fill="%23f9f3d9"/></svg>') 4 4, auto;
-        }
-
-        /* Общие переменные для тем */
-        :root {
-            --bg-gradient: radial-gradient(circle at 10% 20%, #1a3a1a, #0a1f0a);
-            --text-primary: #e9f5e1;
-            --text-secondary: #c8e6b5;
-            --card-bg: rgba(20, 40, 15, 0.7);
-            --border-glow: #5a8f3c;
-            --accent: #9bcf5e;
-            --leaf-shadow: drop-shadow(0 0 4px #4caf50);
-            --glass-effect: blur(12px);
-        }
-
-        body.light {
-            --bg-gradient: radial-gradient(circle at 30% 40%, #f9f1c0, #d8e3b5);
-            --text-primary: #2c4b1e;
-            --text-secondary: #3a5e2a;
-            --card-bg: rgba(250, 248, 220, 0.75);
-            --border-glow: #b5d98a;
-            --accent: #6f9e3f;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="27" viewBox="0 0 24 27"><polygon points="2,2 22,13 12,16 2,25" fill="%236b8e23" stroke="%233c5a1a" stroke-width="1.5"/><circle cx="12" cy="13" r="2" fill="%23f0e68c"/></svg>') 8 8, auto;
         }
 
         body {
-            font-family: 'Quicksand', sans-serif;
-            background: var(--bg-gradient);
-            color: var(--text-primary);
-            transition: background 0.5s ease, color 0.3s ease;
-            min-height: 100vh;
-            position: relative;
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, 'Roboto', sans-serif;
+            transition: background 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), color 0.4s ease;
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
 
-        /* Трава и сложный фон */
-        body::before {
-            content: "";
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 200px;
-            background: repeating-linear-gradient(45deg, rgba(50,80,30,0.6) 0px, rgba(50,80,30,0.6) 2px, transparent 2px, transparent 8px),
-                        repeating-linear-gradient(135deg, rgba(70,110,40,0.5) 0px, rgba(70,110,40,0.5) 3px, transparent 3px, transparent 12px);
-            pointer-events: none;
-            z-index: 2;
+        /* Основные темы */
+        body.dark-theme {
+            background: radial-gradient(circle at 20% 30%, #0a1f0a, #030e03);
+            color: #e2e0c8;
         }
 
-        /* Декоративные листики на фоне */
-        .leaf-bg {
+        body.light-theme {
+            background: radial-gradient(circle at 80% 20%, #f9f2d9, #d9e3b3);
+            color: #2c3a1f;
+        }
+
+        body.green-theme {
+            background: radial-gradient(circle at 50% 50%, #cbe5b4, #9bc48b);
+            color: #1e3a1a;
+        }
+
+        /* Трава и листья на фоне (сложный слой) */
+        .grass-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 1;
+            z-index: 2;
+            background-repeat: repeat-x, repeat;
+            background-position: bottom, 0 0;
+            background-size: auto 180px, auto;
+            opacity: 0.7;
+            transition: background 0.5s;
         }
-        .leaf-bg i {
-            position: absolute;
-            font-size: 2rem;
-            color: rgba(100, 160, 60, 0.2);
-            animation: floatLeaf 12s infinite linear;
+
+        body.dark-theme .grass-overlay {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200"><path fill="%231e3b1a" opacity="0.5" d="M0,150 L40,120 L80,160 L120,100 L160,140 L200,90 L240,130 L280,70 L320,110 L360,50 L400,100 L440,130 L480,80 L520,110 L560,70 L600,120 L640,90 L680,130 L720,80 L760,110 L800,50 L840,100 L880,130 L920,70 L960,110 L1000,80 L1040,120 L1080,90 L1120,130 L1160,60 L1200,90 L1200,200 L0,200 Z"/></svg>'), repeating-linear-gradient(45deg, #1a3a1a22, #0f2b0f22 30px);
         }
-        @keyframes floatLeaf {
-            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            80% { opacity: 0.6; }
+        body.light-theme .grass-overlay {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200"><path fill="%2386b366" opacity="0.45" d="M0,150 L40,120 L80,160 L120,100 L160,140 L200,90 L240,130 L280,70 L320,110 L360,50 L400,100 L440,130 L480,80 L520,110 L560,70 L600,120 L640,90 L680,130 L720,80 L760,110 L800,50 L840,100 L880,130 L920,70 L960,110 L1000,80 L1040,120 L1080,90 L1120,130 L1160,60 L1200,90 L1200,200 L0,200 Z"/></svg>'), repeating-linear-gradient(45deg, #b9d48b33, #e9f5cc33 40px);
+        }
+        body.green-theme .grass-overlay {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200"><path fill="%235a9642" opacity="0.6" d="M0,150 L40,120 L80,160 L120,100 L160,140 L200,90 L240,130 L280,70 L320,110 L360,50 L400,100 L440,130 L480,80 L520,110 L560,70 L600,120 L640,90 L680,130 L720,80 L760,110 L800,50 L840,100 L880,130 L920,70 L960,110 L1000,80 L1040,120 L1080,90 L1120,130 L1160,60 L1200,90 L1200,200 L0,200 Z"/></svg>'), repeating-linear-gradient(55deg, #83b75233, #d0f0a033 35px);
+        }
+
+        /* Падающие листики */
+        .falling-leaf {
+            position: fixed;
+            top: -20px;
+            pointer-events: none;
+            z-index: 999;
+            font-size: 1.8rem;
+            opacity: 0.6;
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0.8; }
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Контейнер с тремя колонками */
-        .container {
-            display: flex;
+        /* Контейнер сайта */
+        .site-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 2rem;
-            gap: 2rem;
+            padding: 2rem 2rem 4rem;
             position: relative;
-            z-index: 5;
+            z-index: 10;
         }
 
-        /* Левая колонка (кнопки-шаблоны) */
-        .left-col {
-            flex: 1;
-            min-width: 180px;
-            background: var(--card-bg);
-            backdrop-filter: var(--glass-effect);
-            border-radius: 32px;
-            padding: 1.5rem;
-            border: 1px solid var(--border-glow);
-            height: fit-content;
-            position: sticky;
-            top: 90px;
-            transition: all 0.3s;
-        }
-        .left-col h3 {
-            font-family: 'Playfair Display', serif;
-            margin-bottom: 1rem;
-            font-size: 1.6rem;
-            letter-spacing: 1px;
-        }
-        .temp-btn {
-            display: block;
-            width: 100%;
-            background: rgba(90, 120, 50, 0.4);
-            border: 1px solid var(--accent);
-            padding: 12px;
-            margin: 12px 0;
-            border-radius: 60px;
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 600;
-            color: var(--text-primary);
-            transition: 0.2s;
-            cursor: pointer;
+        /* ЗАГОЛОВОК С КАЧАЮЩИМИСЯ БУКВАМИ */
+        .logo-wave {
             text-align: center;
-        }
-        .temp-btn:hover {
-            background: var(--accent);
-            color: #1e2a0e;
-            transform: scale(1.02);
-            box-shadow: 0 0 12px var(--accent);
-        }
-
-        /* Центральная колонка (контент) */
-        .main-col {
-            flex: 3;
-        }
-
-        /* Заголовок "Логово" с волной */
-        .wave-title {
-            text-align: center;
-            margin: 2rem 0 3rem;
-        }
-        .wave-title span {
-            display: inline-block;
-            font-family: 'Playfair Display', serif;
-            font-size: 5rem;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 4.5rem;
             font-weight: 800;
-            letter-spacing: 0.2rem;
+            letter-spacing: 8px;
+            margin-bottom: 2rem;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .wave-letter {
+            display: inline-block;
             animation: wave 1.2s infinite ease-in-out;
             transform-origin: center;
-            color: var(--accent);
-            text-shadow: 0 0 8px #446622;
         }
         @keyframes wave {
-            0%, 100% { transform: translateY(0); }
+            0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-12px); }
         }
-        /* задержка для каждой буквы */
-        .wave-title span:nth-child(1) { animation-delay: 0s; }
-        .wave-title span:nth-child(2) { animation-delay: 0.1s; }
-        .wave-title span:nth-child(3) { animation-delay: 0.2s; }
-        .wave-title span:nth-child(4) { animation-delay: 0.3s; }
-        .wave-title span:nth-child(5) { animation-delay: 0.4s; }
-        .wave-title span:nth-child(6) { animation-delay: 0.5s; }
+        /* Задержки для каждой буквы */
+        .wave-letter:nth-child(1) { animation-delay: 0s; }
+        .wave-letter:nth-child(2) { animation-delay: 0.1s; }
+        .wave-letter:nth-child(3) { animation-delay: 0.2s; }
+        .wave-letter:nth-child(4) { animation-delay: 0.3s; }
+        .wave-letter:nth-child(5) { animation-delay: 0.4s; }
+        .wave-letter:nth-child(6) { animation-delay: 0.5s; }
 
-        /* Блоки с текстом */
+        /* Две колонки */
+        .columns-wrapper {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        .left-sidebar {
+            flex: 1.2;
+            min-width: 180px;
+        }
+        .main-content {
+            flex: 4;
+            min-width: 260px;
+        }
+        .right-sidebar {
+            flex: 1.5;
+            min-width: 200px;
+        }
+
+        /* Блоки кнопок слева (шаблоны картинок) */
+        .image-templates {
+            background: rgba(20, 30, 10, 0.4);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(120, 160, 70, 0.5);
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+        .template-btn {
+            display: block;
+            width: 100%;
+            background: #2a471faa;
+            border: none;
+            margin: 0.8rem 0;
+            padding: 0.8rem;
+            border-radius: 60px;
+            font-family: 'Inter', sans-serif;
+            font-weight: bold;
+            color: #f3efcf;
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .template-btn:hover {
+            background: #5f8b3e;
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px #9acd3266;
+        }
+
+        /* Всплывающее окно (модалка) для шаблона картинки */
+        .modal-img {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+        .modal-card {
+            background: #2c2c1ed9;
+            padding: 2rem;
+            border-radius: 48px;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            font-family: monospace;
+            border: 1px solid #b7d968;
+        }
+        .close-modal {
+            margin-top: 1rem;
+            background: #769c48;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            cursor: pointer;
+        }
+
+        /* Стили для блоков текста */
         .text-block {
-            background: var(--card-bg);
-            backdrop-filter: var(--glass-effect);
+            background: rgba(15, 25, 5, 0.45);
+            backdrop-filter: blur(12px);
             border-radius: 48px;
             padding: 2rem;
-            margin-bottom: 2rem;
-            border-left: 8px solid var(--accent);
-            transition: transform 0.4s ease, opacity 0.6s ease;
+            margin-bottom: 2.5rem;
+            border-left: 6px solid #b0d96e;
+            transition: all 0.4s ease;
+            transform: translateY(20px);
             opacity: 0;
-            transform: translateY(40px);
+            animation: fadeSlideUp 0.7s forwards;
         }
-        .text-block.visible {
-            opacity: 1;
-            transform: translateY(0);
+        body.light-theme .text-block {
+            background: rgba(245, 245, 200, 0.7);
+            border-left-color: #6b8c3e;
+            color: #1c2f12;
         }
-        .text-block h2 {
+        body.green-theme .text-block {
+            background: rgba(220, 245, 180, 0.8);
+            border-left-color: #2c6e2c;
+        }
+        @keyframes fadeSlideUp {
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .text-block h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            margin-bottom: 0.75rem;
+            font-size: 1.9rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        .text-block p {
-            line-height: 1.6;
-            font-size: 1.1rem;
-            margin-top: 0.5rem;
-        }
-        .deco-icon {
-            font-size: 1.5rem;
-            color: var(--accent);
+        .text-content {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 1rem;
+            line-height: 1.5;
+            font-weight: 400;
         }
 
-        /* Правая колонка ссылки */
-        .right-col {
-            flex: 1;
-            min-width: 200px;
-            background: var(--card-bg);
-            backdrop-filter: var(--glass-effect);
-            border-radius: 32px;
-            padding: 1.5rem;
-            border: 1px solid var(--border-glow);
-            height: fit-content;
-            position: sticky;
-            top: 90px;
+        /* Ссылки справа (соцсети) */
+        .links-box {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(16px);
+            border-radius: 42px;
+            padding: 1.8rem;
+            border: 1px solid #98bf64;
         }
-        .right-col h3 {
-            font-family: 'Playfair Display', serif;
-            margin-bottom: 1rem;
-            font-size: 1.6rem;
-        }
-        .link-list {
-            list-style: none;
-        }
-        .link-list li {
-            margin: 1rem 0;
-        }
-        .link-list a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
+        .links-box a {
             display: flex;
             align-items: center;
             gap: 12px;
+            text-decoration: none;
+            color: #e9f5cf;
+            margin: 1rem 0;
+            font-weight: 500;
             transition: 0.2s;
-            border-bottom: 1px dashed transparent;
+            padding: 10px;
+            border-radius: 100px;
         }
-        .link-list a:hover {
-            color: var(--accent);
-            border-bottom-color: var(--accent);
-            transform: translateX(5px);
+        .links-box a:hover {
+            background: #4f6b2e66;
+            padding-left: 20px;
+            letter-spacing: 1px;
         }
+        body.light-theme .links-box a { color: #2c4820; }
+        body.green-theme .links-box a { color: #1c471c; }
 
         /* Кнопка смены темы */
         .theme-switch {
             position: fixed;
             bottom: 25px;
             right: 25px;
-            background: var(--card-bg);
+            z-index: 300;
+            background: #4f6b2ecc;
             backdrop-filter: blur(8px);
-            border-radius: 60px;
+            border: none;
             padding: 12px 20px;
+            border-radius: 50px;
             font-weight: bold;
-            border: 1px solid var(--accent);
-            z-index: 99;
+            color: white;
             cursor: pointer;
-            transition: 0.3s;
-            font-family: 'Quicksand', sans-serif;
+            font-family: monospace;
         }
-        .theme-switch:hover {
-            background: var(--accent);
-            color: #1a2a0a;
-        }
-
-        /* падающие листики (canvas) */
-        #falling-leaves {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1000;
+        /* значки декоративные */
+        .deco-icon {
+            font-size: 1.3rem;
+            display: inline-block;
+            margin: 0 5px;
         }
 
-        /* Адаптив */
-        @media (max-width: 900px) {
-            .container {
-                flex-direction: column;
-            }
-            .left-col, .right-col {
-                position: static;
-                width: 100%;
-            }
-            .wave-title span {
-                font-size: 2.8rem;
-            }
+        /* блок для примера клика смены эффекта */
+        .click-effect-demo {
+            background: #5b7c3a55;
+            padding: 1rem;
+            border-radius: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.1s linear;
+            margin-top: 1rem;
+        }
+        .click-effect-demo:active {
+            transform: scale(0.97);
+            background: #98c46e;
+            color: black;
+        }
+        hr {
+            margin: 20px 0;
+            border-color: #6a8e42;
+        }
+        .small-note {
+            font-size: 0.8rem;
+            font-family: monospace;
+            text-align: center;
+            margin-top: 3rem;
+            opacity: 0.6;
         }
     </style>
 </head>
-<body>
-    <canvas id="falling-leaves"></canvas>
-    <div class="leaf-bg" id="leaf-bg"></div>
+<body class="dark-theme">
+    <div class="grass-overlay"></div>
+    <div class="site-container">
+        <!-- название сайта сверху + качающиеся буквы Логово -->
+        <div class="logo-wave">
+            <span class="wave-letter">Л</span>
+            <span class="wave-letter">о</span>
+            <span class="wave-letter">г</span>
+            <span class="wave-letter">о</span>
+            <span class="wave-letter">в</span>
+            <span class="wave-letter">о</span>
+        </div>
 
-    <div class="container">
-        <!-- Левая колонка: кнопки для шаблонов под картинки -->
-        <aside class="left-col">
-            <h3>𓋴 Шаблоны 𓍯</h3>
-            <div class="temp-btn" data-template="mystic">🌿 Мистический лес</div>
-            <div class="temp-btn" data-template="runes">𓊹 Древние руны</div>
-            <div class="temp-btn" data-template="moonlight">🌙 Лунный свет</div>
-            <div class="temp-btn" data-template="herbs">🍃 Травник</div>
-            <div id="template-message" style="margin-top: 20px; font-size: 0.9rem; font-style: italic; padding: 8px; background: rgba(0,0,0,0.2); border-radius: 24px; text-align: center;">✨ Нажми — появится описание ✨</div>
-        </aside>
-
-        <!-- Центральная колонка -->
-        <main class="main-col">
-            <!-- Заголовок с волной -->
-            <div class="wave-title">
-                <span>Л</span><span>о</span><span>г</span><span>о</span><span>в</span><span>о</span>
-            </div>
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <i class="fas fa-leaf" style="color: var(--accent); font-size: 1.8rem;"></i> 𖥧 <i class="fas fa-seedling" style="color: var(--accent);"></i> 𖥧 <i class="fas fa-tree"></i>
-            </div>
-
-            <!-- Блок основного текста 1 -->
-            <div class="text-block" id="block1">
-                <h2><span class="deco-icon">𓋴</span> Добро пожаловать в Логово</h2>
-                <p>Здесь будет основной текст вашего сайта. Этот блок украшен плавным появлением при скролле. Вы можете вставить любые описания, мысли, стихи или истории. Каждый блок поддерживает красивый шрифт Quicksand для основного текста и декоративный Playfair Display для заголовков.<br>
-                <i class="fas fa-leaf"></i> 𖥧 <i class="fas fa-feather-alt"></i>  Легко заменяйте содержимое на своё.</p>
-            </div>
-
-            <!-- Блок основного текста 2 -->
-            <div class="text-block" id="block2">
-                <h2><span class="deco-icon">𓍯</span> Будущие записи</h2>
-                <p>Здесь может быть второй раздел. Например, ваши мысли о природе, коллекция эстетичных изображений или личный дневник. Просто кликните на текст и измените его по своему желанию.<br>
-                Дополните падающими листиками, которые уже анимированы на странице.</p>
-                <div style="margin-top: 15px; padding: 10px; background: rgba(100,140,70,0.2); border-radius: 28px;">
-                    🌱 <strong>Вставьте сюда важную цитату</strong> 🌱
+        <div class="columns-wrapper">
+            <!-- Левая колонка: кнопки под шаблоны картинок -->
+            <div class="left-sidebar">
+                <div class="image-templates">
+                    <h3> 𖥧  Сундук образов  𖥧</h3>
+                    <button class="template-btn" data-img="🌿 Тёмный лес, луч солнца сквозь туман, старый пень с мхом">🍃 Тёмный лес</button>
+                    <button class="template-btn" data-img="✨ Светлая поляна, бабочки, лёгкий ветер, цветы иван-чая">✨ Светлая поляна</button>
+                    <button class="template-btn" data-img="🍄 Уютное логово, книги, свечи, паутина с каплями росы">🍄 Уютное логово</button>
+                    <button class="template-btn" data-img="🌙 Ночная чаща с лунной дорожкой, силуэты деревьев">🌙 Лунная чаща</button>
+                </div>
+                <div class="click-effect-demo" id="clickMagic">
+                    🌟 нажми меня — сменится эффект! 🌟
+                </div>
+                <div class="small-note">
+                    𖥧 𖤣𖥧 𖤣 𖥧
                 </div>
             </div>
 
-            <!-- Блок с возможностью клика (смена эффекта) -->
-            <div class="text-block" id="clickable-block">
-                <h2><span class="deco-icon">𓋴</span> ✨ Нажми на меня ✨</h2>
-                <p id="clickable-text">Этот блок меняет эффект при нажатии. Попробуй кликнуть — текст или фон слегка преобразятся. Отличный способ удивить гостя.</p>
-            </div>
-
-            <!-- Еще один блок с шаблоном -->
-            <div class="text-block">
-                <h2><span class="deco-icon">𖥧</span> Символы и листья</h2>
-                <p> 𖥧  𖤣𖥧  𓍊𓋴𓍊  𓆣  𖦹  ✿  ❀  Используйте эти знаки для украшения. Здесь будет ваш текст, дополненный природной эстетикой.</p>
-                <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px;">
-                    <span style="background: rgba(130,180,70,0.3); border-radius: 60px; padding: 4px 12px;">🍃 тишина леса</span>
-                    <span style="background: rgba(130,180,70,0.3); border-radius: 60px; padding: 4px 12px;">🌿 логово силы</span>
+            <!-- Центральная часть: основные текстовые блоки -->
+            <div class="main-content">
+                <!-- блок 1 -->
+                <div class="text-block">
+                    <h3>𖥧 Обитель теней 𖥧</h3>
+                    <div class="text-content">
+                        Здесь будет твой главный текст. <strong>Зелёные листья</strong> шепчут истории, а мшистые камни хранят тайны. <br>
+                        Ты можешь написать тут своё вступление, описание или дневник. <br>
+                        <span class="deco-icon">𖥧</span> Каждый блок можно наполнить любым содержанием.
+                    </div>
+                </div>
+                <!-- блок 2 -->
+                <div class="text-block">
+                    <h3>✿ Журнал искателя ✿</h3>
+                    <div class="text-content">
+                        В этот раздел вставь свои мысли, планы или цитаты. <br>
+                        «Лес дышит в унисон с сердцем» —  𖤣𖥧 <br>
+                        Добавь сюда истории о будущих проектах, картинках или настроении.
+                    </div>
+                </div>
+                <!-- блок 3 дополнительный -->
+                <div class="text-block">
+                    <h3>🍃 Тропы вдохновения 🍃</h3>
+                    <div class="text-content">
+                        Заметки о творчестве: планы по наполнению сайта, коллекция идей.<br>
+                        Символы 𖥧 𖤣 𖥧 создают магическую атмосферу.
+                    </div>
                 </div>
             </div>
-        </main>
 
-        <!-- Правая колонка: ссылки на соцсети/сайты -->
-        <aside class="right-col">
-            <h3>𖥧 Связь 𖥧</h3>
-            <ul class="link-list">
-                <li><a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i> Pinterest</a></li>
-                <li><a href="https://vk.com" target="_blank"><i class="fab fa-vk"></i> ВКонтакте</a></li>
-                <li><a href="#" id="custom-link-trigger"><i class="fas fa-plus-circle"></i> Добавить ссылку</a></li>
-                <li><a href="https://t.me" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></li>
-            </ul>
-            <div style="margin-top: 20px; font-size:0.8rem; text-align:center;">𖥧  𓍊  𖥧</div>
-        </aside>
+            <!-- Правая колонка: рабочие ссылки -->
+            <div class="right-sidebar">
+                <div class="links-box">
+                    <h3> 𖥧  сплетения  𖥧</h3>
+                    <a href="https://www.pinterest.com" target="_blank">📌 Pinterest</a>
+                    <a href="https://vk.com" target="_blank">🌿 VKontakte</a>
+                    <a href="https://github.com" target="_blank">🐚 GitHub (портфолио)</a>
+                    <a href="#" target="_blank">✨ Telegram канал</a>
+                    <hr>
+                    <p style="font-size: 0.8rem;">⋆｡°✩ будущие ссылки</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="theme-switch" id="themeToggle">🌙/☀️ Сменить тему</div>
+    <!-- модалка для показа шаблона картинки -->
+    <div id="imageModal" class="modal-img">
+        <div class="modal-card">
+            <p id="modalText" style="font-size: 1.2rem; margin-bottom: 1rem;">🌸 шаблон...</p>
+            <button class="close-modal">закрыть 𖥧</button>
+        </div>
+    </div>
+
+    <!-- плавающая кнопка смены темы -->
+    <button class="theme-switch" id="themeToggle">🌓 смена облика: чаща/полянка</button>
 
     <script>
-        // 1. Волна букв уже через CSS
-
-        // 2. Падающие листики (canvas)
-        const canvas = document.getElementById('falling-leaves');
-        let ctx = canvas.getContext('2d');
-        let leaves = [];
-        let leafCount = 35;
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        // ========= 1. Падающие листики (не эмодзи) SVG-подобные символы =========
+        function createLeaf() {
+            const leaves = ['🍃', '🌿', '🍂', '🍁', '𖥧', '𖤣', '✽', '❀'];
+            const leaf = document.createElement('div');
+            leaf.classList.add('falling-leaf');
+            leaf.innerHTML = leaves[Math.floor(Math.random() * leaves.length)];
+            leaf.style.left = Math.random() * 100 + '%';
+            leaf.style.fontSize = 1.2 + Math.random() * 2 + 'rem';
+            leaf.style.animationDuration = 4 + Math.random() * 6 + 's';
+            leaf.style.opacity = 0.4 + Math.random() * 0.5;
+            document.body.appendChild(leaf);
+            setTimeout(() => { leaf.remove(); }, 10000);
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        setInterval(createLeaf, 1800);
 
-        class Leaf {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height - canvas.height;
-                this.size = 8 + Math.random() * 12;
-                this.speedY = 1 + Math.random() * 2.5;
-                this.speedX = -0.5 + Math.random() * 1;
-                this.rotation = Math.random() * 360;
-                this.rotSpeed = (Math.random() - 0.5) * 0.03;
-                this.opacity = 0.5 + Math.random() * 0.4;
-            }
-            update() {
-                this.y += this.speedY;
-                this.x += this.speedX;
-                this.rotation += this.rotSpeed;
-                if (this.y > canvas.height + 50) {
-                    this.y = -30;
-                    this.x = Math.random() * canvas.width;
-                }
-                if (this.x > canvas.width + 50) this.x = -30;
-                if (this.x < -50) this.x = canvas.width + 30;
-            }
-            draw() {
-                if (!ctx) return;
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation * Math.PI / 180);
-                ctx.beginPath();
-                // рисуем листик в виде капли/овала
-                ctx.moveTo(0, -this.size/1.8);
-                ctx.quadraticCurveTo(this.size/2.2, 0, 0, this.size/1.4);
-                ctx.quadraticCurveTo(-this.size/2.2, 0, 0, -this.size/1.8);
-                ctx.fillStyle = `rgba(90, 140, 60, ${this.opacity * 0.7})`;
-                ctx.fill();
-                ctx.fillStyle = `rgba(70, 110, 40, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.moveTo(0, -this.size/2.2);
-                ctx.lineTo(this.size/5, 0);
-                ctx.lineTo(0, this.size/4);
-                ctx.lineTo(-this.size/5, 0);
-                ctx.fill();
-                ctx.restore();
-            }
-        }
-
-        function initLeaves() {
-            for(let i=0; i<leafCount; i++) {
-                leaves.push(new Leaf());
-            }
-        }
-
-        function animateLeaves() {
-            if(!ctx) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for(let l of leaves) {
-                l.update();
-                l.draw();
-            }
-            requestAnimationFrame(animateLeaves);
-        }
-        initLeaves();
-        animateLeaves();
-
-        // 3. Всплывающие окна при скролле (Intersection Observer)
+        // ========= 2. Анимация всплывающих окон при скролле (все .text-block уже получили класс, но добавим intersection observer на случай задержки) =========
         const blocks = document.querySelectorAll('.text-block');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    entry.target.classList.add('visible');
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeSlideUp 0.7s forwards';
+                    observer.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.2 });
         blocks.forEach(block => observer.observe(block));
 
-        // 4. Кликабельный блок со сменой эффекта
-        const clickBlock = document.getElementById('clickable-block');
-        const clickText = document.getElementById('clickable-text');
-        clickBlock.addEventListener('click', () => {
-            clickBlock.style.transform = 'scale(1.01)';
-            clickBlock.style.boxShadow = '0 0 20px var(--accent)';
-            clickText.innerHTML = '🍃 ✨ Эффект сработал! Ты почувствовал магию леса. ✨ 🍃';
-            setTimeout(() => {
-                clickBlock.style.transform = '';
-                clickBlock.style.boxShadow = '';
-                setTimeout(() => {
-                    clickText.innerHTML = 'Этот блок меняет эффект при нажатии. Попробуй кликнуть — текст или фон слегка преобразятся. Отличный способ удивить гостя.';
-                }, 2000);
-            }, 800);
-        });
-
-        // 5. Смена темы: темная чаща <-> светлая полянка + нежно-зеленый вариант при двойном нажатии
-        const themeBtn = document.getElementById('themeToggle');
-        let themeIndex = 0; // 0 dark, 1 light, 2 softGreen
-        const themes = ['dark', 'light', 'soft'];
-        themeBtn.addEventListener('click', () => {
-            themeIndex = (themeIndex + 1) % 3;
-            document.body.classList.remove('dark', 'light');
-            if(themeIndex === 0) {
-                document.body.classList.remove('light');
-                document.body.style.setProperty('--bg-gradient', 'radial-gradient(circle at 10% 20%, #1a3a1a, #0a1f0a)');
-                document.body.style.setProperty('--text-primary', '#e9f5e1');
-                document.body.style.setProperty('--accent', '#9bcf5e');
-            } else if(themeIndex === 1) {
-                document.body.classList.add('light');
-                document.body.style.setProperty('--bg-gradient', 'radial-gradient(circle at 30% 40%, #f9f1c0, #d8e3b5)');
-                document.body.style.setProperty('--text-primary', '#2c4b1e');
-                document.body.style.setProperty('--accent', '#6f9e3f');
-            } else {
-                // нежно-зеленый
-                document.body.style.setProperty('--bg-gradient', 'radial-gradient(circle at 20% 30%, #d0e7b5, #b8d99c)');
-                document.body.style.setProperty('--text-primary', '#1f4f2b');
-                document.body.style.setProperty('--accent', '#80b343');
-                document.body.classList.remove('light');
+        // ========= 3. Смена фона при пролистывании (плавная смена оттенка темной чащи) =========
+        // Дополнительный эффект: меняем насыщенность background по скроллу для dark-theme (плавно)
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const maxScroll = document.body.scrollHeight - window.innerHeight;
+            let percent = maxScroll > 0 ? scrollY / maxScroll : 0;
+            if (document.body.classList.contains('dark-theme')) {
+                // легкий эффект - травяной оттенок усиливается
+                let intensity = 0.2 + percent * 0.4;
+                document.body.style.background = `radial-gradient(circle at 20% 30%, rgba(10,31,10,1), rgba(3,14,3,0.9))`;
+            } else if (document.body.classList.contains('light-theme')) {
+                document.body.style.background = `radial-gradient(circle at 80% 20%, #f9f2d9, #d9e3b3)`;
+            } else if (document.body.classList.contains('green-theme')) {
+                document.body.style.background = `radial-gradient(circle at 50% 50%, #cbe5b4, #9bc48b)`;
             }
         });
 
-        // 6. Левая колонка: шаблоны под будущие картинки (всплывающее сообщение)
-        const tempBtns = document.querySelectorAll('.temp-btn');
-        const msgBox = document.getElementById('template-message');
-        tempBtns.forEach(btn => {
+        // ========= 4. Смена темы и нежно-зеленая кнопка =========
+        const themeBtn = document.getElementById('themeToggle');
+        let themeIndex = 0; // 0 dark, 1 light, 2 green
+        const themes = ['dark-theme', 'light-theme', 'green-theme'];
+        themeBtn.addEventListener('click', () => {
+            themeIndex = (themeIndex + 1) % themes.length;
+            document.body.classList.remove('dark-theme', 'light-theme', 'green-theme');
+            document.body.classList.add(themes[themeIndex]);
+            if (themes[themeIndex] === 'green-theme') themeBtn.style.background = '#6f9e3f';
+            else if (themes[themeIndex] === 'light-theme') themeBtn.style.background = '#b3b87a';
+            else themeBtn.style.background = '#4f6b2ecc';
+        });
+
+        // ========= 5. Клик на кнопки слева - вылезают шаблоны под будущие картинки =========
+        const modal = document.getElementById('imageModal');
+        const modalText = document.getElementById('modalText');
+        const templateBtns = document.querySelectorAll('.template-btn');
+        templateBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const type = btn.getAttribute('data-template');
-                let content = '';
-                if(type === 'mystic') content = '🌲 Мистический лес: тёмные тона, туман, силуэты деревьев. Представь эскиз для будущей иллюстрации.';
-                else if(type === 'runes') content = '𓊹 Древние руны: вставь фото рунического круга или камней с символами.';
-                else if(type === 'moonlight') content = '🌙 Лунный свет: серебристые оттенки, луна сквозь листву. Добавь эффект свечения.';
-                else content = '🍃 Травник: вдохновение растениями, гербарий, сухие травы в рамке.';
-                msgBox.innerHTML = `✨ ${content} ✨<br><small>✎ тут будет твой будущий визуал</small>`;
-                msgBox.style.background = 'rgba(100,150,70,0.4)';
-                setTimeout(() => {
-                    msgBox.style.background = 'rgba(0,0,0,0.2)';
-                }, 2500);
+                const imgDesc = btn.getAttribute('data-img') || "шаблон для рисунка: лесная композиция";
+                modalText.innerText = `🍃 Эскиз-шаблон: ${imgDesc}\n\n🌸 здесь можно будет разместить изображение или набросок. Сохрани идею! 𖥧`;
+                modal.style.display = 'flex';
             });
         });
-
-        // 7. Правая колонка: возможность добавить произвольную ссылку
-        const addLinkTrigger = document.getElementById('custom-link-trigger');
-        addLinkTrigger.addEventListener('click', (e) => {
-            e.preventDefault();
-            let newUrl = prompt('Вставьте ссылку (например https://vk.com/durov)');
-            let name = prompt('Название для ссылки', 'Мой сайт');
-            if(newUrl && name) {
-                const linkList = document.querySelector('.link-list');
-                const newLi = document.createElement('li');
-                newLi.innerHTML = `<a href="${newUrl}" target="_blank"><i class="fas fa-link"></i> ${name}</a>`;
-                linkList.appendChild(newLi);
-            } else alert('Ссылка или название не введены');
+        document.querySelector('.close-modal').addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.style.display = 'none';
         });
 
-        // 8. Дополнительный зеленый декор: иконки и подсказки в консоль, но нам важны листики на фоне - создадим несколько плавающих листиков в .leaf-bg
-        function addBackgroundLeaves() {
-            const leafBg = document.getElementById('leaf-bg');
-            for(let i=0;i<25;i++) {
-                let leafSpan = document.createElement('i');
-                leafSpan.className = 'fas fa-leaf';
-                leafSpan.style.left = Math.random() * 100 + '%';
-                leafSpan.style.animationDuration = 14 + Math.random() * 20 + 's';
-                leafSpan.style.animationDelay = Math.random() * 20 + 's';
-                leafSpan.style.fontSize = 1.2 + Math.random() * 2 + 'rem';
-                leafSpan.style.opacity = 0.2 + Math.random() * 0.3;
-                leafSpan.style.position = 'absolute';
-                leafBg.appendChild(leafSpan);
-            }
-        }
-        addBackgroundLeaves();
+        // ========= 6. Возможность нажать на что-то со сменой эффекта (блок клик-эффект демо) =========
+        const clickBlock = document.getElementById('clickMagic');
+        clickBlock.addEventListener('click', () => {
+            clickBlock.style.transform = 'scale(0.95)';
+            clickBlock.style.background = '#b5d47c';
+            clickBlock.style.color = '#1c3a0c';
+            setTimeout(() => {
+                clickBlock.style.transform = '';
+                clickBlock.style.background = '';
+                clickBlock.style.color = '';
+            }, 300);
+            alert('✨ Эффект смены: ты коснулся магии леса! (позже здесь появятся картинки)');
+        });
 
-        // Мелкий шрифт уже унаследован от body
-        // Все значки и эффекты работают
+        // ========= 7. Зеленые листики по клику на любое место справа (эстетика) =========
+        document.body.addEventListener('click', function(e) {
+            if(e.target.closest('.theme-switch')) return;
+            let extraLeaf = document.createElement('div');
+            extraLeaf.classList.add('falling-leaf');
+            extraLeaf.innerHTML = '🍃';
+            extraLeaf.style.left = (e.clientX / window.innerWidth * 100) + '%';
+            extraLeaf.style.top = '10px';
+            extraLeaf.style.fontSize = '1.4rem';
+            extraLeaf.style.animationDuration = '1.8s';
+            document.body.appendChild(extraLeaf);
+            setTimeout(() => extraLeaf.remove(), 2000);
+        });
 
-        console.log('Логово готово! 🍃');
+        // Добавим зелёных листиков статичных в углах? эффект уже есть
+        console.log('Сайт Логово — готов к наполнению');
     </script>
 </body>
 </html>
