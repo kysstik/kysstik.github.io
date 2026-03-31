@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Логово — Творческая мастерская</title>
+    <title>Логово | Художественная студия</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,605 +13,609 @@
             cursor: none;
         }
 
+        body {
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.3s ease;
+            cursor: none;
+        }
+
+        /* Темная тема (по умолчанию) */
+        body.dark {
+            background: linear-gradient(135deg, #0a0f0a 0%, #1a2a1a 50%, #0a1f0a 100%);
+            color: #e0e8d0;
+        }
+
+        body.dark .glass-card {
+            background: rgba(10, 20, 10, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(80, 120, 50, 0.3);
+        }
+
+        body.light {
+            background: linear-gradient(135deg, #f9f3e0 0%, #e8f0d5 50%, #f5f0dc 100%);
+            color: #2a3a1a;
+        }
+
+        body.light .glass-card {
+            background: rgba(245, 245, 220, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(100, 150, 70, 0.3);
+        }
+
         /* Кастомный курсор */
         .cursor {
             width: 20px;
             height: 20px;
-            background: rgba(144, 238, 144, 0.6);
+            border: 2px solid #7cb342;
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
-            z-index: 9999;
+            z-index: 10000;
             transition: all 0.1s ease;
-            backdrop-filter: blur(2px);
+            transform: translate(-50%, -50%);
         }
 
         .cursor.active {
-            width: 45px;
-            height: 45px;
-            background: rgba(100, 200, 100, 0.8);
-            backdrop-filter: blur(4px);
-            transform: scale(1.2);
+            width: 40px;
+            height: 40px;
+            background: rgba(124, 179, 66, 0.2);
+            border: 2px solid #9ccc65;
         }
 
-        body {
-            font-family: 'Segoe UI', 'Quicksand', 'Poppins', sans-serif;
-            transition: background 0.5s ease, color 0.3s ease;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Темная тема */
-        body.dark {
-            background: linear-gradient(135deg, #0a2f1f 0%, #0a1a0f 50%, #051007 100%);
-            color: #e8f0e0;
-        }
-
-        body.light {
-            background: linear-gradient(135deg, #f9f7e8 0%, #e8f0da 50%, #d4e4c4 100%);
-            color: #2c3e2f;
-        }
-
-        /* Фоновые элементы травы */
-        .grass-bg {
+        /* Трава */
+        .grass {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 200px;
+            height: 100px;
             pointer-events: none;
-            z-index: 1;
+            z-index: 10;
         }
 
-        body.dark .grass-bg {
-            background: repeating-linear-gradient(transparent, transparent 95%, rgba(30, 80, 30, 0.3) 95%);
-            box-shadow: inset 0 -50px 30px -20px rgba(0, 0, 0, 0.5);
+        .grass::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, 
+                rgba(80, 120, 50, 0.3) 0px, 
+                rgba(80, 120, 50, 0.3) 2px,
+                transparent 2px,
+                transparent 8px);
         }
 
-        body.light .grass-bg {
-            background: repeating-linear-gradient(transparent, transparent 95%, rgba(120, 180, 80, 0.2) 95%);
+        body.light .grass::before {
+            background: repeating-linear-gradient(45deg, 
+                rgba(100, 150, 70, 0.4) 0px, 
+                rgba(100, 150, 70, 0.4) 2px,
+                transparent 2px,
+                transparent 8px);
         }
 
-        /* Контейнер */
+        /* Падающие листья */
+        .leaf {
+            position: fixed;
+            pointer-events: none;
+            font-size: 24px;
+            animation: fall linear forwards;
+            z-index: 1000;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Заголовок с волной */
+        .title-wave {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            text-align: center;
+            margin: 2rem 0;
+            letter-spacing: 0.1em;
+        }
+
+        .wave-letter {
+            display: inline-block;
+            animation: wave 1.5s ease-in-out infinite;
+            animation-delay: calc(var(--i) * 0.1s);
+        }
+
+        @keyframes wave {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Контейнеры */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
             position: relative;
-            z-index: 10;
+            z-index: 2;
         }
 
         /* Шапка */
-        .header {
+        header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
+            padding: 20px;
             margin-bottom: 40px;
-            border-bottom: 2px solid rgba(100, 200, 100, 0.3);
-            position: sticky;
-            top: 0;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            z-index: 100;
         }
 
         .logo {
-            font-size: 28px;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 3px;
+            font-size: 2rem;
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #7cb342, #4caf50);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
-        body.dark .logo {
-            color: #9bde7e;
-            text-shadow: 0 0 10px rgba(100, 200, 100, 0.5);
-        }
-
-        body.light .logo {
-            color: #5a8f4c;
-        }
-
-        /* Анимированный заголовок */
-        .animated-title {
-            text-align: center;
-            margin: 60px 0;
-        }
-
-        .wave-letter {
-            display: inline-block;
-            font-size: 80px;
-            font-weight: bold;
-            font-family: 'Pacifico', 'Segoe UI', cursive;
-            animation: wave 1.2s ease-in-out infinite;
-            margin: 0 5px;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        @keyframes wave {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        /* Разные задержки для каждой буквы */
-        .wave-letter:nth-child(1) { animation-delay: 0s; }
-        .wave-letter:nth-child(2) { animation-delay: 0.1s; }
-        .wave-letter:nth-child(3) { animation-delay: 0.2s; }
-        .wave-letter:nth-child(4) { animation-delay: 0.3s; }
-        .wave-letter:nth-child(5) { animation-delay: 0.4s; }
-        .wave-letter:nth-child(6) { animation-delay: 0.5s; }
-
-        /* Тема переключатель */
+        /* Кнопки тем */
         .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            border-radius: 30px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(124, 179, 66, 0.3);
+            color: inherit;
             cursor: pointer;
-            transition: 0.3s;
+            font-size: 1rem;
+            transition: all 0.3s;
         }
 
-        .theme-toggle:hover {
-            transform: scale(1.1);
-        }
-
-        /* Основная сетка */
-        .main-grid {
+        /* Основная структура */
+        .main-layout {
             display: grid;
             grid-template-columns: 280px 1fr 280px;
             gap: 30px;
             margin: 40px 0;
         }
 
-        /* Боковые колонки */
-        .sidebar-left, .sidebar-right {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            padding: 20px;
-            height: fit-content;
-        }
-
-        body.light .sidebar-left, body.light .sidebar-right {
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        .sidebar-left button, .sidebar-right a {
-            display: block;
-            width: 100%;
-            margin: 10px 0;
-            padding: 12px;
-            background: rgba(100, 200, 100, 0.2);
-            border: 1px solid rgba(100, 200, 100, 0.5);
-            border-radius: 12px;
-            color: inherit;
-            text-decoration: none;
-            transition: 0.3s;
-            text-align: center;
-        }
-
-        .sidebar-left button:hover, .sidebar-right a:hover {
-            background: rgba(100, 200, 100, 0.5);
-            transform: translateX(5px);
-        }
-
-        /* Блоки контента */
-        .content-block {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(8px);
+        /* Стили карточек */
+        .glass-card {
             border-radius: 20px;
             padding: 25px;
+            margin-bottom: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Левая колонка */
+        .left-panel .btn {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 10px;
+            background: rgba(124, 179, 66, 0.3);
+            color: inherit;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background: rgba(124, 179, 66, 0.6);
+            transform: scale(1.05);
+        }
+
+        .template-preview {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .template-preview.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        /* Правая колонка */
+        .social-links a {
+            display: block;
+            padding: 10px;
+            margin: 10px 0;
+            color: inherit;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-radius: 10px;
+        }
+
+        .social-links a:hover {
+            background: rgba(124, 179, 66, 0.3);
+            transform: translateX(10px);
+        }
+
+        /* Блоки текста */
+        .text-block {
             margin-bottom: 30px;
-            transition: transform 0.3s, opacity 0.5s;
+            padding: 25px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            transform: translateY(50px);
             opacity: 0;
-            transform: translateY(30px);
+            transition: all 0.6s;
         }
 
-        .content-block.visible {
-            opacity: 1;
+        .text-block.visible {
             transform: translateY(0);
+            opacity: 1;
         }
 
-        body.light .content-block {
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        /* Карточки заказов */
-        .order-grid {
+        /* Карточки услуг */
+        .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
-            margin: 30px 0;
+            margin: 40px 0;
         }
 
-        .order-card {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 15px;
-            padding: 20px;
+        .service-card {
             text-align: center;
-            transition: 0.3s;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .order-card:hover {
-            transform: translateY(-10px);
-            background: rgba(100, 200, 100, 0.3);
+        .service-card:hover {
+            transform: scale(1.05);
         }
 
         .price {
-            font-size: 28px;
-            font-weight: bold;
-            margin: 15px 0;
-            color: #9bde7e;
+            font-size: 1.5rem;
+            color: #7cb342;
+            margin: 10px 0;
         }
 
         /* Отзывы */
-        .reviews-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: #9bde7e;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.3s;
-            z-index: 1000;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .reviews-btn:hover {
-            width: 200px;
-            border-radius: 30px;
-            background: #7bc45e;
-        }
-
-        .reviews-btn span {
-            display: none;
-        }
-
-        .reviews-btn:hover span {
-            display: inline;
-            margin-left: 10px;
-        }
-
-        /* Падающие листья */
-        .leaf {
-            position: fixed;
-            top: -50px;
-            pointer-events: none;
-            z-index: 999;
-            font-size: 24px;
-            animation: fall linear forwards;
-        }
-
-        @keyframes fall {
-            to {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Модальные окна */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: rgba(30, 30, 30, 0.95);
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 500px;
-            width: 90%;
+        .reviews-section {
             position: relative;
+            margin: 40px 0;
         }
 
-        body.light .modal-content {
-            background: rgba(255, 255, 255, 0.95);
-            color: #2c3e2f;
-        }
-
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 28px;
+        .reviews-btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            background: #7cb342;
+            color: white;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
-        /* Декоративные значки */
-        .deco {
-            font-size: 24px;
-            margin: 0 5px;
-            opacity: 0.7;
-        }
-
-        /* Аккордеон */
-        .accordion {
-            background: rgba(100, 200, 100, 0.1);
-            margin: 10px 0;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .accordion-header {
-            padding: 15px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .accordion-header:hover {
-            background: rgba(100, 200, 100, 0.2);
-        }
-
-        .accordion-content {
+        .reviews-dropdown {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s ease-out;
+            transition: max-height 0.5s ease;
+            background: rgba(124, 179, 66, 0.2);
+            border-radius: 15px;
+            margin-top: 10px;
+        }
+
+        .reviews-dropdown.active {
+            max-height: 500px;
+            padding: 20px;
+        }
+
+        /* Правила */
+        .rules-section {
+            margin: 20px 0;
+        }
+
+        .rules-header {
+            cursor: pointer;
+            padding: 15px;
+            background: rgba(124, 179, 66, 0.3);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .rules-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
             padding: 0 15px;
         }
 
-        .accordion.active .accordion-content {
+        .rules-content.active {
             max-height: 500px;
             padding: 15px;
         }
 
+        /* Анимации */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* Адаптивность */
         @media (max-width: 1024px) {
-            .main-grid {
+            .main-layout {
                 grid-template-columns: 1fr;
             }
+            
+            .title-wave {
+                font-size: 3rem;
+            }
+        }
+
+        /* Декоративные значки */
+        .deco-icon {
+            font-size: 1.2rem;
+            margin: 0 5px;
+        }
+
+        /* Блоки для текста */
+        .content-area {
+            min-height: 200px;
         }
     </style>
 </head>
 <body class="dark">
     <div class="cursor"></div>
-    <div class="theme-toggle" onclick="toggleTheme()">🌙/☀️</div>
-    <div class="grass-bg"></div>
+    <div class="grass"></div>
 
     <div class="container">
-        <div class="header">
-            <div class="logo">𖥧 ЛОГОВО 𖥧</div>
-            <div class="deco">✧ ༄ 𖥧 ༄ ✧</div>
+        <header>
+            <div class="logo">𓋴 𓋴 𓋴</div>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙/☀️</button>
+        </header>
+
+        <div class="title-wave">
+            <span class="wave-letter" style="--i:1">Л</span>
+            <span class="wave-letter" style="--i:2">о</span>
+            <span class="wave-letter" style="--i:3">г</span>
+            <span class="wave-letter" style="--i:4">о</span>
+            <span class="wave-letter" style="--i:5">в</span>
+            <span class="wave-letter" style="--i:6">о</span>
         </div>
 
-        <div class="animated-title">
-            <div id="titleWave">
-                <!-- Буквы будут добавлены через JS -->
-            </div>
-            <p class="deco" style="margin-top: 20px;">𖥧 ༄ 𖥧 ༄ 𖥧</p>
-        </div>
-
-        <div class="main-grid">
-            <!-- Левая колонка с кнопками -->
-            <div class="sidebar-left">
-                <h3>📁 Шаблоны</h3>
-                <button onclick="showTemplate('art')">🎨 Арт шаблон</button>
-                <button onclick="showTemplate('sketch')">✏️ Скетч шаблон</button>
-                <button onclick="showTemplate('full')">🖼️ Полный шаблон</button>
-                
-                <div class="accordion" style="margin-top: 20px;">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">📜 Правила</div>
-                    <div class="accordion-content">
-                        <p>• Оплата 50% предоплата</p>
-                        <p>• Срок от 3 до 14 дней</p>
-                        <p>• 3 бесплатные правки</p>
-                        <p>• Коммерческое использование +50%</p>
+        <div class="main-layout">
+            <!-- Левая колонка -->
+            <div class="left-panel">
+                <div class="glass-card">
+                    <h3>📁 Шаблоны 𖥧</h3>
+                    <button class="btn" onclick="showTemplate('portrait')">Портрет</button>
+                    <button class="btn" onclick="showTemplate('landscape')">Пейзаж</button>
+                    <button class="btn" onclick="showTemplate('fantasy')">Фэнтези</button>
+                    <div id="template1" class="template-preview">
+                        <h4>Шаблон портрета</h4>
+                        <p>▸ Размер: A4<br>▸ Поза: анфас/профиль<br>▸ Детализация: высокая</p>
+                    </div>
+                    <div id="template2" class="template-preview">
+                        <h4>Шаблон пейзажа</h4>
+                        <p>▸ Формат: 16:9<br>▸ Стиль: реализм/фэнтези<br>▸ Время суток: любое</p>
+                    </div>
+                    <div id="template3" class="template-preview">
+                        <h4>Шаблон фэнтези</h4>
+                        <p>▸ Персонажи: до 3<br>▸ Магия: да<br>▸ Фон: детальный</p>
                     </div>
                 </div>
 
-                <div class="accordion">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">🎨 Что рисую</div>
-                    <div class="accordion-content">
-                        <p>✓ Персонажи</p>
-                        <p>✓ Портреты</p>
-                        <p>✓ Фурри</p>
-                        <p>✓ Пейзажи</p>
-                        <p>✓ Фан-арт</p>
+                <div class="glass-card rules-section">
+                    <div class="rules-header" onclick="toggleRules()">
+                        <h3>📜 Правила 𖥧</h3>
                     </div>
-                </div>
-
-                <div class="accordion">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">🚫 Что НЕ рисую</div>
-                    <div class="accordion-content">
-                        <p>✗ NSFW</p>
-                        <p>✗ Хейт-арт</p>
-                        <p>✗ Сложное меха</p>
-                        <p>✗ Гротеск</p>
+                    <div id="rulesContent" class="rules-content">
+                        <p>✨ Что я рисую:<br>- Персонажи (люди, антропоморфы)<br>- Портреты<br>- Фэнтези арт<br>- Пейзажи</p>
+                        <p>❌ Что НЕ рисую:<br>- NSFW<br>- Горя<br>- Политику<br>- Меха/технику</p>
                     </div>
                 </div>
             </div>
 
             <!-- Центральная колонка -->
-            <div class="main-content">
-                <div class="content-block">
-                    <h2>𖥧 Добро пожаловать в Логово 𖥧</h2>
-                    <p>Здесь рождаются истории и образы. Каждый штрих — часть моего мира.</p>
-                    <p style="margin-top: 15px;"><em>Текст для вашего будущего контента можно вставлять сюда, просто заменяя этот абзац.</em></p>
+            <div class="center-panel">
+                <div class="text-block">
+                    <h2>Добро пожаловать в Логово 𖥧</h2>
+                    <p>Здесь рождается магия через линии и цвета. Каждая работа — это отдельная история, которую мы создаём вместе.</p>
                 </div>
 
-                <div class="content-block">
-                    <h2>✨ Последние работы</h2>
-                    <p>Здесь будут ваши работы и описания. Просто замените этот текст на нужный.</p>
-                    <div class="order-grid" style="margin-top: 20px;">
-                        <div style="background: rgba(100,200,100,0.2); padding: 15px; border-radius: 10px;">Пример работы 1</div>
-                        <div style="background: rgba(100,200,100,0.2); padding: 15px; border-radius: 10px;">Пример работы 2</div>
+                <div class="text-block">
+                    <h3>Последние работы</h3>
+                    <div class="services-grid">
+                        <div class="glass-card service-card" onclick="alert('Скетч: от 2-3 дней')">
+                            <span class="deco-icon">𖥧</span>
+                            <h4>Скетч</h4>
+                            <p>Быстрые наброски, передающие идею</p>
+                        </div>
+                        <div class="glass-card service-card" onclick="alert('Покрас: от 5-7 дней')">
+                            <span class="deco-icon">𖥧</span>
+                            <h4>Простой покрас</h4>
+                            <p>Цветное решение без детализации фона</p>
+                        </div>
+                        <div class="glass-card service-card" onclick="alert('Полноценная работа: от 10-14 дней')">
+                            <span class="deco-icon">𖥧</span>
+                            <h4>Полноценная работа</h4>
+                            <p>Детальный арт с фоном и проработкой</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="content-block">
-                    <h2>📝 Заказать арт</h2>
-                    <div class="order-grid">
-                        <div class="order-card" onclick="openOrderModal('sketch')">
-                            <h3>✏️ Скетч</h3>
+                <div class="text-block">
+                    <h3>Заказ арта</h3>
+                    <div class="services-grid">
+                        <div class="glass-card">
+                            <h4>Скетч</h4>
                             <div class="price">от 500 ₽</div>
-                            <p>Черновой набросок, идея</p>
+                            <p>✏️ Простой набросок<br>⏱️ 2-3 дня</p>
                         </div>
-                        <div class="order-card" onclick="openOrderModal('color')">
-                            <h3>🎨 Простой покрас</h3>
+                        <div class="glass-card">
+                            <h4>Простой покрас</h4>
                             <div class="price">от 1500 ₽</div>
-                            <p>Скетч + базовые цвета</p>
+                            <p>🎨 Цвет + базовые тени<br>⏱️ 5-7 дней</p>
                         </div>
-                        <div class="order-card" onclick="openOrderModal('full')">
-                            <h3>🌟 Полноценная работа</h3>
-                            <div class="price">от 3500 ₽</div>
-                            <p>Детализация, фон, эффекты</p>
+                        <div class="glass-card">
+                            <h4>Полноценная работа</h4>
+                            <div class="price">от 3000 ₽</div>
+                            <p>🖼️ Детальный фон + проработка<br>⏱️ 10-14 дней</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Правая колонка со ссылками -->
-            <div class="sidebar-right">
-                <h3>🔗 Соцсети</h3>
-                <a href="#" target="_blank">📌 Pinterest</a>
-                <a href="#" target="_blank">💙 VKontakte</a>
-                <a href="#" target="_blank">📷 Instagram</a>
-                <a href="#" target="_blank">🎨 ArtStation</a>
-                <a href="#" target="_blank">🐦 Twitter/X</a>
-                <a href="#" target="_blank">💬 Telegram</a>
+            <!-- Правая колонка -->
+            <div class="right-panel">
+                <div class="glass-card">
+                    <h3>🔗 Ссылки 𖥧</h3>
+                    <div class="social-links">
+                        <a href="https://pinterest.com" target="_blank">📌 Pinterest</a>
+                        <a href="https://vk.com" target="_blank">📱 ВКонтакте</a>
+                        <a href="https://instagram.com" target="_blank">📸 Instagram</a>
+                        <a href="https://t.me" target="_blank">✈️ Telegram</a>
+                    </div>
+                </div>
+
+                <div class="glass-card reviews-section">
+                    <button class="reviews-btn" onclick="toggleReviews()">📝 Отзывы</button>
+                    <div id="reviewsDropdown" class="reviews-dropdown">
+                        <p>⭐ "Потрясающая работа! Всё выполнено в срок" - Анна</p>
+                        <p>⭐ "Очень понравился стиль, буду заказывать ещё" - Михаил</p>
+                        <p>⭐ "Отличное качество и подход к клиенту" - Елена</p>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Кнопка отзывов -->
-    <div class="reviews-btn" onclick="showReviews()">
-        💬 <span>Написать отзыв</span>
-    </div>
-
-    <!-- Модальное окно для заказа -->
-    <div id="orderModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Оформление заказа</h2>
-            <p id="orderTypeText"></p>
-            <textarea placeholder="Ваше сообщение..." style="width: 100%; margin: 15px 0; padding: 10px;"></textarea>
-            <button onclick="closeModal()" style="padding: 10px 20px; background: #9bde7e; border: none; border-radius: 10px;">Отправить</button>
-        </div>
-    </div>
-
-    <!-- Модальное окно для шаблонов -->
-    <div id="templateModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeTemplateModal()">&times;</span>
-            <h2>Шаблон</h2>
-            <div id="templateContent"></div>
         </div>
     </div>
 
     <script>
-        // Анимированный заголовок
-        const title = "Логово";
-        const waveContainer = document.getElementById('titleWave');
-        for(let i = 0; i < title.length; i++) {
-            const span = document.createElement('span');
-            span.className = 'wave-letter';
-            span.textContent = title[i];
-            waveContainer.appendChild(span);
-        }
-
         // Кастомный курсор
         const cursor = document.querySelector('.cursor');
         document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX - 10 + 'px';
-            cursor.style.top = e.clientY - 10 + 'px';
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
         });
 
-        document.addEventListener('mousedown', () => cursor.classList.add('active'));
-        document.addEventListener('mouseup', () => cursor.classList.remove('active'));
+        document.addEventListener('mousedown', () => {
+            cursor.classList.add('active');
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursor.classList.remove('active');
+        });
 
         // Падающие листья
         function createLeaf() {
             const leaf = document.createElement('div');
             leaf.className = 'leaf';
-            leaf.innerHTML = ['🍃', '🍂', '🌿', '𖥧', '༄'][Math.floor(Math.random() * 5)];
+            leaf.innerHTML = ['🍃', '🍂', '𖥧', '𓋴', '✨'][Math.floor(Math.random() * 5)];
             leaf.style.left = Math.random() * window.innerWidth + 'px';
-            leaf.style.animationDuration = 5 + Math.random() * 5 + 's';
-            leaf.style.fontSize = 20 + Math.random() * 20 + 'px';
+            leaf.style.animationDuration = 3 + Math.random() * 4 + 's';
+            leaf.style.fontSize = 16 + Math.random() * 20 + 'px';
             document.body.appendChild(leaf);
-            setTimeout(() => leaf.remove(), 10000);
+            
+            setTimeout(() => {
+                leaf.remove();
+            }, 7000);
         }
-        setInterval(createLeaf, 3000);
+
+        setInterval(createLeaf, 2000);
 
         // Смена темы
         function toggleTheme() {
-            document.body.classList.toggle('dark');
-            document.body.classList.toggle('light');
+            const body = document.body;
+            if (body.classList.contains('dark')) {
+                body.classList.remove('dark');
+                body.classList.add('light');
+            } else {
+                body.classList.remove('light');
+                body.classList.add('dark');
+            }
+        }
+
+        // Показ шаблонов
+        function showTemplate(type) {
+            document.querySelectorAll('.template-preview').forEach(preview => {
+                preview.classList.remove('active');
+            });
+            
+            if (type === 'portrait') {
+                document.getElementById('template1').classList.add('active');
+            } else if (type === 'landscape') {
+                document.getElementById('template2').classList.add('active');
+            } else if (type === 'fantasy') {
+                document.getElementById('template3').classList.add('active');
+            }
+        }
+
+        // Отзывы
+        function toggleReviews() {
+            const dropdown = document.getElementById('reviewsDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        // Правила
+        function toggleRules() {
+            const rules = document.getElementById('rulesContent');
+            rules.classList.toggle('active');
         }
 
         // Анимация при скролле
-        const blocks = document.querySelectorAll('.content-block');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if(entry.isIntersecting) {
+                if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                 }
             });
         }, { threshold: 0.1 });
-        blocks.forEach(block => observer.observe(block));
 
-        // Модальное окно заказа
-        function openOrderModal(type) {
-            const modal = document.getElementById('orderModal');
-            const text = document.getElementById('orderTypeText');
-            if(type === 'sketch') text.innerHTML = '<strong>Скетч</strong><br>Цена: от 500 ₽';
-            if(type === 'color') text.innerHTML = '<strong>Простой покрас</strong><br>Цена: от 1500 ₽';
-            if(type === 'full') text.innerHTML = '<strong>Полноценная работа</strong><br>Цена: от 3500 ₽';
-            modal.style.display = 'flex';
-        }
+        document.querySelectorAll('.text-block').forEach(block => {
+            observer.observe(block);
+        });
 
-        function closeModal() {
-            document.getElementById('orderModal').style.display = 'none';
-        }
-
-        // Шаблоны
-        function showTemplate(type) {
-            const modal = document.getElementById('templateModal');
-            const content = document.getElementById('templateContent');
-            if(type === 'art') content.innerHTML = '<h3>Шаблон для арта</h3><p>Здесь будет ваша сетка для будущих работ. Замените этот текст на нужный контент.</p><div style="background: rgba(100,200,100,0.2); height: 200px; margin-top: 15px; display: flex; align-items: center; justify-content: center;">🔲 Место для изображения</div>';
-            if(type === 'sketch') content.innerHTML = '<h3>Шаблон для скетча</h3><p>Область для черновых набросков и идей. Вставьте сюда ваши материалы.</p><div style="background: rgba(100,200,100,0.2); height: 200px; margin-top: 15px;">✏️ Поле для скетча</div>';
-            if(type === 'full') content.innerHTML = '<h3>Полный шаблон</h3><p>Детализированная работа с фоном и эффектами. Замените текст.</p><div style="background: rgba(100,200,100,0.2); height: 200px; margin-top: 15px;">🖼️ Полноценный холст</div>';
-            modal.style.display = 'flex';
-        }
-
-        function closeTemplateModal() {
-            document.getElementById('templateModal').style.display = 'none';
-        }
-
-        // Аккордеон
-        function toggleAccordion(header) {
-            const accordion = header.parentElement;
-            accordion.classList.toggle('active');
-        }
-
-        // Отзывы
-        function showReviews() {
-            alert('📝 Здесь будет форма для отзывов.\n\nВы можете встроить Google Форму или любой другой сервис.');
-        }
-
-        // Закрытие модалок по клику вне
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
+        // Смена фона при скролле
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            const body = document.body;
+            
+            if (scrollPosition > 500) {
+                if (body.classList.contains('dark')) {
+                    document.querySelector('.grass').style.opacity = '0.5';
+                } else {
+                    document.querySelector('.grass').style.opacity = '0.7';
+                }
+            } else {
+                document.querySelector('.grass').style.opacity = '1';
             }
-        }
+        });
+
+        // Эффект клика на карточках услуг
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
     </script>
 </body>
 </html>
